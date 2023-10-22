@@ -16,19 +16,19 @@ export const menuDashboard = [
   // },
   {
     label: "Vault",
-    href: "/dashboard",
+    href: "/dashboard/vault",
   },
   {
     label: "Compounding Vault",
-    href: "/account",
+    href: "/dashboard/account",
   },
   {
     label: "Dispensing Vault",
-    href: "/transactions",
+    href: "/dashboard/transactions",
   },
   {
     label: "Rebalance Investments",
-    href: "/dashboard",
+    href: "/dashboard/rebalance",
   },
   {
     label: "Cross Chain Transfer",
@@ -36,6 +36,6 @@ export const menuDashboard = [
   },
   {
     label: "Transactions",
-    href: "/dashboard/transactions",
+    href: "/transactions",
   },
 ]
