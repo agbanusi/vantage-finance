@@ -23,12 +23,12 @@ export function SiteHeader() {
         <MainNav />
         <MobileNav />
         <div className="hidden flex-1 items-center justify-between space-x-2 md:flex md:justify-end">
-          <Link
+          {/* <Link
             href="/dashboard"
             className={buttonVariants({ variant: "ghost" })}
           >
             Dashboard
-          </Link>
+          </Link> */}
           <ModeToggle />
         </div>
       </div>

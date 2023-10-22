@@ -1,74 +1,48 @@
-import Image from "next/image"
-import Link from "next/link"
-import { FaDiscord, FaGithub } from "react-icons/fa"
-import { LuBook } from "react-icons/lu"
+"use client"
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import {
-  PageHeader,
-  PageHeaderCTA,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from "@/components/layout/page-header"
-import { CopyButton } from "@/components/shared/copy-button"
-import { ExampleDemos } from "@/components/shared/example-demos"
+import { motion } from "framer-motion"
 
-export default function HomePage() {
+import { FADE_DOWN_ANIMATION_VARIANTS } from "@/config/design"
+import { WalletAddress } from "@/components/blockchain/wallet-address"
+import { WalletBalance } from "@/components/blockchain/wallet-balance"
+import { WalletEnsName } from "@/components/blockchain/wallet-ens-name"
+import { IsWalletConnected } from "@/components/shared/is-wallet-connected"
+import { IsWalletDisconnected } from "@/components/shared/is-wallet-disconnected"
+
+export default function PageDashboard() {
   return (
-    <div className="container relative mt-20 px-0">
-      <PageHeader className="pb-8">
-        <Image
-          src="/logo-gradient.png"
-          alt="TurboETH Logo"
-          width={80}
-          height={80}
-          className="h-20 w-20 rounded-2xl"
-        />
-        <PageHeaderHeading>Build Web3 in Turbo&nbsp;Mode</PageHeaderHeading>
-        <PageHeaderDescription>{siteConfig.description}</PageHeaderDescription>
-        <PageHeaderCTA>
-          <Link
-            href={siteConfig.links.docs}
-            target="_blank"
-            rel="noreferrer noopener"
-            className={buttonVariants({ variant: "default" })}
-          >
-            <LuBook className="mr-2 h-4 w-4" />
-            Docs
-          </Link>
-          <Link
-            href={siteConfig.links.github}
-            target="_blank"
-            rel="noreferrer noopener"
-            className={buttonVariants({ variant: "secondary" })}
-          >
-            <FaGithub className="mr-2 h-4 w-4" />
-            Github
-          </Link>
-          <Link
-            href={siteConfig.links.discord}
-            target="_blank"
-            rel="noreferrer noopener"
-            className={cn(
-              buttonVariants(),
-              "bg-[#7289da] text-white hover:bg-[#7289da]/80"
-            )}
-          >
-            <FaDiscord className="mr-2 h-4 w-4" />
-            Discord
-          </Link>
-        </PageHeaderCTA>
-        <PageHeaderCTA>
-          <CopyButton value="pnpm create turbo-eth@latest">
-            <span className="text-xs sm:text-base">
-              pnpm create turbo-eth@latest
+    <motion.div
+      animate="show"
+      className="flex h-full w-full items-center justify-center lg:py-8"
+      initial="hidden"
+      variants={FADE_DOWN_ANIMATION_VARIANTS}
+      viewport={{ once: true }}
+      whileInView="show"
+    >
+      <IsWalletConnected>
+        <div className="col-span-12 flex flex-col items-center justify-center lg:col-span-9">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold lg:text-6xl">
+              <span className="bg-gradient-to-br from-indigo-600 to-purple-700 bg-clip-text text-transparent dark:from-indigo-100 dark:to-purple-200">
+                hi 👋 <WalletEnsName />
+              </span>
+            </h3>
+            <span className="font-light">
+              <WalletAddress className="mt-5 block text-xl font-light" />
+              <div className="mt-4">
+                <span className="text-3xl font-light">
+                  Balance: <WalletBalance decimals={7} /> ETH
+                </span>
+              </div>
             </span>
-          </CopyButton>
-        </PageHeaderCTA>
-      </PageHeader>
-      <ExampleDemos />
-    </div>
+          </div>
+        </div>
+      </IsWalletConnected>
+      <IsWalletDisconnected>
+        <h3 className="text-lg font-normal">
+          Connect Wallet to view your personalized dashboard.
+        </h3>
+      </IsWalletDisconnected>
+    </motion.div>
   )
 }
