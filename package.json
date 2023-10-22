@@ -21,8 +21,7 @@
     "prepare": "husky install ; prisma generate ; wagmi generate"
   },
   "husky": {
-    "hooks": {
-    }
+    "hooks": {}
   },
   "lint-staged": {
     "./src": [
@@ -84,6 +83,7 @@
     "eventsource-parser": "^1.0.0",
     "framer-motion": "^8.4.3",
     "graphql-request": "^6.1.0",
+    "hardhat": "^2.9.9",
     "iron-session": "^6.3.1",
     "jotai": "^1.13.0",
     "luxon": "^3.2.1",

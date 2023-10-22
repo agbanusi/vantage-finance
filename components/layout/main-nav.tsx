@@ -29,7 +29,7 @@ export function MainNav() {
         <LightDarkImage
           LightImage="/logo-dark.png"
           DarkImage="/logo-light.png"
-          alt="TurboETH"
+          alt="Vantage Finance"
           className="rounded-full"
           height={32}
           width={32}
@@ -38,9 +38,9 @@ export function MainNav() {
           {siteConfig.name}
         </span>
       </Link>
-      <nav className="flex items-center space-x-6 text-base font-medium">
+      {/* <nav className="flex items-center space-x-6 text-base font-medium">
         <MainNavMenu />
-      </nav>
+      </nav> */}
     </div>
   )
 }
@@ -80,11 +80,11 @@ function MainNavMenu() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <LinkComponent href="https://docs.turboeth.xyz/overview">
+          {/* <LinkComponent href="https://docs.turboeth.xyz/overview">
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               <span>Documentation</span>
             </NavigationMenuLink>
-          </LinkComponent>
+          </LinkComponent> */}
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
