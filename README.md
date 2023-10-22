@@ -1,135 +1,102 @@
-![image](https://user-images.githubusercontent.com/3408362/230732083-1c98e451-08af-41c2-b522-126370e8c6a5.png)
+# Vantage Finance - Decentralized Cross-Chain Asset Management
 
-# ⚡ TurboETH - Web3 App Starter Kit
+Vantage Finance is a decentralized application (dApp) that allows users to manage and monitor their assets across different blockchain networks. With the Asset Manager, users can seamlessly rebalance, compounding their investments, invest, and monitor their assets while enjoying the benefits of cross-chain transfers of tokens and investments for profit and rebalancing purposes. 
 
-![CI](https://github.com/turbo-eth/template-web3-app/actions/workflows/ci.yml/badge.svg)
-![TS](https://badgen.net/badge/-/TypeScript?icon=typescript&label&labelColor=blue&color=555555)
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+## Table of Contents
 
-Web3 App Template built using Next.js, RainbowKit, Tailwind, Sign-In With Ethereum, and more.
+- [Vantage Finance - Decentralized Cross-Chain Asset Management](#vantage-finance---decentralized-cross-chain-asset-management)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Usage](#usage)
+    - [Smart Contracts](#smart-contracts)
+    - [Updating User Profiles](#updating-user-profiles)
+    - [HyperLane](#hyperlane)
+    - [ChainLink Integration](#chainlink-integration)
+    - [Supported Chains](#supported-chains)
+    - [Supported Protocols and Investments:](#supported-protocols-and-investments)
+    - [Improvements for coming weeks:](#improvements-for-coming-weeks)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fturbo-eth%2Ftemplate-web3-app&project-name=TurboETH&repository-name=turbo-eth&demo-title=TurboETH&env=NEXTAUTH_SECRET,DATABASE_URL&envDescription=How%20to%20get%20these%20env%20variables%3A&envLink=https%3A%2F%2Fgithub.com%2Fturbo-eth%2Ftemplate-web3-app%2Fblob%integrations%2F.env.example)
+## Features
 
-### [Documentation](https://docs.turboeth.xyz)
+- **Cross-Chain Asset Management**: Easily manage and rebalance your assets across different blockchain networks.
 
-- Getting Started
-  - [Environment Variables](https://docs.turboeth.xyz/getting-started/environment)
-  - [JSON-RPC](https://docs.turboeth.xyz/getting-started/json-rpc)
-  - [WAGMI CLI](https://docs.turboeth.xyz/getting-started/wagmi-cli)
-  - [UI Components](https://docs.turboeth.xyz/getting-started/design-system)
-  - [Backend Database](https://docs.turboeth.xyz/getting-started/database)
-- Core Integrations
-  - [🌈 RainbowKit](https://docs.turboeth.xyz/integration/rainbowkit)
-  - [🔏 Sign-In With Ethereum](https://docs.turboeth.xyz/integration/sign-in-with-ethereum)
-- Smart Contract Integrations
-  - [ERC20](https://docs.turboeth.xyz/integration/smart-contract-erc20)
-- API Integrations
-  - [Disco](https://docs.turboeth.xyz/integration/disco)
-  - [Etherscan](https://docs.turboeth.xyz/integration/etherscan)
+- **User Profile**: Create and maintain user profiles to track the value, investments, withdrawals, and debt related to their assets.
 
-# Getting Started
+- **ChainLink Integration**: Utilize ChainLink Price Feeds to get real-time token prices in USD, ensuring accurate asset value tracking.
 
-The `pnpm` CLI is the recommended package manager but `npm` and `yarn` should work too.
+- **Salary and Retirment Plan**: GEt a portion of your asset valaue every period of time typically monthly as a retirment or saving plan to only withdraw a portion of assets for upkeep.
 
-```bash
-pnpm install
-```
+- **Gas-Efficient Routing**: Utilize the HyperLane GasRouter for efficient transaction routing.
 
-#### Development
+## Getting Started
 
-```bash
-pnpm dev
-```
+### Prerequisites
 
-#### Build
+Before getting started, make sure you have the following tools and dependencies installed:
 
-```bash
-pnpm build
-```
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
 
-### Web3 Core
+### Installation
 
-- [WAGMI CLI](https://wagmi.sh/cli/getting-started) - Automatic React Hook Generation
-- [RainbowKit](https://www.rainbowkit.com/) - Wallet connection manager
-- [Sign-In With Ethereum](https://login.xyz/) - Account authentication
+1. **Clone the repository**:
 
-### Web2 Frameworks
+   ```markdown
+   git clone https://github.com/yourusername/asset-manager.git
+   ```
 
-- [Vercel](https://vercel.com/) - App Infrastructure
-- [Prisma](https://www.prisma.io/) - Database ORM
+2. **Install project dependencies**:
+  ```
+    npm install
+  ```
 
-### Developer Experience
 
-- [TypeScript](https://www.typescriptlang.org/) – Static type checker for end-to-end typesafety
-- [Prettier](https://prettier.io/) – Opinionated code formatter for consistent code style
-- [ESLint](https://eslint.org/) – Pluggable linter for Next.js and TypeScript
+### Usage
+To use the Asset Manager, follow these steps:
 
-### User Interface
+1. Deploy the Smart Contracts.
+2. Configure and set up your User Profile.
+3. Start managing and monitoring your assets across different blockchain networks.
 
-- [TailwindCSS](https://tailwindcss.com) – Utility-first CSS framework for rapid UI development
-- [Radix](https://www.radix-ui.com/) – Primitives like modal, popover, etc. to build a stellar user experience
-- [Framer Motion](https://www.framer.com/motion/) – Motion library for React to animate components with ease
-- [React Icons](https://react-icons.github.io/react-icons) – Beautifully simple, pixel-perfect icons
 
-The [ui.shadcn.com](https://ui.shadcn.com) components are included in the `/components/shared/ui` folder.
+### Smart Contracts
+The Asset Manager consists of the following smart contracts:
 
-# 💻 Developer Experience
+1. User Profile: Manages user profiles and asset data.
+2. HyperLane: Provides gas-efficient cross-chain communication capabilities.
+3. ChainLink Integration: Integrates ChainLink Price Feeds for accurate asset valuation and cross chain transfer.
+4. User Profile: The User Profile smart contract tracks and manages user assets and values across chains. Users can update their profiles, track asset values, and receive real-time updates on their asset status.
+5. Basic Vault: This Vault is majorly for saving tokens or invesment tokens for a future date.
+6. Compounding Vault: To force growth of asset, the compounding vault, withdraws all reward and reinvests the as capital to increase capital and eventually ROI.
+7. Dispensing Vault: This is to reduce liquiddation of assets and allow a set amount to be dispensed to user every set period to take care of real world needs and reduce interaction with contracts.
+8. Compounding + Dispensing Vault: This does both features above.
 
-### 🐕 What is husky
+### Updating User Profiles
+Users profiles are updated by vault contracts calling the updateUserProfile function and based on added value, withdrawals, and debt related to their assets.
 
-Husky improves your git commits.
 
-You can use it to lint your commit messages, run tests, lint code, etc... when you commit or push. Husky supports all Git hooks.
+### HyperLane
+HyperLane is a critical component for efficient cross chain communication routing, ensuring that asset management is seamless and gas-efficient.
 
-#### 🪝 Hooks
+### ChainLink Integration
+ChainLink is integrated to provide accurate asset valuations by utilizing ChainLink Price Feeds and also to allow cross chain movement of tokens or investments lps
 
-- pre-commit: lint app codebase
-- commit-msg: apply commintlint
+### Supported Chains
+1. Scroll chain: This is the parent chain containing the User Profile, and ChainLink contracts. All Vault contracts are also deployed on the chain
+2. Polygon and ZKEVM: This chains would house another set of Vault Contracts for tokens and Invesments native to these chains.
+3. Mantle: This chain would also house another set of Vault Contracts for tokens and Invesments native to Mantle chain.
+4. Ethereum: This chain would also house another set of Vault Contracts for tokens and Invesments native to Ethereum chain.
+5. Arbitrum: This chain would also house another set of Vault Contracts for tokens and Invesments native to Arbitrum chain.
 
-### 📋 What is commitlint
+### Supported Protocols and Investments:
+1. Spark SDAI Deposit and Withdrawals with compounding and dispensing features on Vault, allowing users to save their SDAI and compound rewards at every set time period. SDAI is also the major token for rebalancing allowing users to sell or buy a portion of their token with SDAI for portfolio rebalancing and rewards dispensing.
+2. Compound: LP tokens from compound are supported
+3. Uniswap: The major platform for the selling and buying of tokens using SDAI and USDT.
 
-commitlint checks if your commit messages meet the [conventional commit format](https://conventionalcommits.org).
-
-In general the pattern mostly looks like this:
-
-```sh
-type(scope?): subject  #scope is optional; multiple scopes are supported (current delimiter options: "/", "\" and ",")
-```
-
-Real world examples can look like this:
-
-```
-chore: run tests on travis ci
-```
-
-```
-fix(server): send cors headers
-```
-
-```
-feat(blog): add comment section
-```
-
-Common types according to [commitlint-config-conventional (based on the Angular convention)](https://github.com/conventional-changelog/commitlint/tree/master/@commitlint/config-conventional#type-enum) can be:
-
-- build
-- chore
-- ci
-- docs
-- feat
-- fix
-- perf
-- refactor
-- revert
-- style
-- test
-
-# Acknowledgements
-
-Original template was forked from https://github.com/wslyvh/nexth
-
-Thank you @wslyvh 🙏
-
-<hr/>
-
-Copyright 2023 [Kames Geraghty](https://twitter.com/KamesGeraghty)
+### Improvements for coming weeks:
+1. add deposit and withdrawal fees
+2. complete integration to frontend
+3. deployments on all needed chains
