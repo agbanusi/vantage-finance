@@ -1,0 +1,6 @@
+[submodule "vantage/lib/forge-std"]
+	path = vantage/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "vantage/lib/wormhole-solidity-sdk"]
+	path = vantage/lib/wormhole-solidity-sdk
+	url = https://github.com/wormhole-foundation/wormhole-solidity-sdk
