@@ -1,6 +1,6 @@
-# Vantage Finance Protocol
+# Vantage Finance
 ### Solving cross-chain financial responsibility
-Welcome to the Vantage Finance Protocol! This protocol is designed to help users lock their investments, compound them, or gradually dispense part of them to improve on-chain financial responsibility while earning yields on their locked value. The vault can also be used to transfer to owned vaults off-chain to improve earnings and capture yields across chains.
+Welcome to the Vantage Finance! This protocol is designed to help users lock their investments, compound them, or gradually dispense part of them to improve on-chain financial responsibility while earning yields on their locked value. The vault can also be used to transfer to owned vaults off-chain to improve earnings and capture yields across chains.
 
 ## Contracts Overview
 - Messenger.sol
