@@ -3,23 +3,26 @@ pragma solidity ^0.8.10;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "./utils/SafeMath.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {Messenger} from "./messenger/Messenger.sol";
 import {IProvider} from "./provider/ProviderTemplate.sol";
 
 
 //basic vault for erc20 with principal compounding
 
-contract TokenVault is ReentrancyGuard, Messenger, Ownable {
+contract TokenVault is ReentrancyGuard, Messenger, Ownable, Pausable {
     using SafeMath for uint256;
-
     struct TokenDeposit {
         uint256 amount;
         uint256 lockDuration;
+        uint256 dispensingPeriod;
+        bool amountDispenser;
+        uint16 percentageToDispense; //3dp
+        uint256 amountToDispense;
+        uint256 lastDispensedTime;
     }
 
     IERC20 public weth;
@@ -34,12 +37,23 @@ contract TokenVault is ReentrancyGuard, Messenger, Ownable {
     bytes32 public constant RELAYER_ROLE = keccak256("RELAYER_ROLE");
     bytes32 public constant COMPOUNDER_ROLE = keccak256("COMPOUNDER_ROLE");
 
-    constructor(address _owner) Ownable(_owner) {}
+    constructor(
+        address _owner,
+        address _wormholeRelayer,
+        address _tokenBridge,
+        address _wormhole
+    ) Messenger(_wormholeRelayer, _tokenBridge, _wormhole) Ownable(_owner) {}
 
     receive() external payable{
         address tempAddress = address(weth);
+        uint _amount = msg.value;
         require(msg.value > 0, "Amount must be greater than 0");
-        weth.deposit(msg.value);
+        
+        uint balanceBefore = weth.balanceOf(address(this));
+        (bool success,) = address(weth).call{value: msg.value}("");
+        require(success, "eth depsoit failed");
+        uint balanceAfter = weth.balanceOf(address(this));
+        require(balanceAfter >= balanceBefore+_amount, "invalid weth conversion");
 
         TokenDeposit storage depositInfo = userDeposits[msg.sender][tempAddress];
         depositInfo.lockDuration += defaultUnlock;
@@ -82,15 +96,15 @@ contract TokenVault is ReentrancyGuard, Messenger, Ownable {
     }
 
     function _isProvider(address provider) private view returns (bool) {
-        if (isActiveProvider(provider)) return true;
+        if (isActiveProvider[provider]) return true;
         return false;
     }
 
-    function deposit(address _tokenAddress, uint256 _amount, uint256 _lockDuration) external virtual whenNotPaused onlyOwner nonReentrant {
+    function deposit(address _tokenAddress, uint256 _amount, uint256 _lockDuration) public virtual whenNotPaused onlyOwner nonReentrant {
         require(block.timestamp < _lockDuration, "Tokens can't be deposited after the unlock time");
         require(_amount > 0, "Amount must be greater than 0");
 
-        IERC20(_token).transferFrom(msg.sender, address(this), _amount);
+        IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _amount);
         TokenDeposit storage depositInfo = userDeposits[msg.sender][_tokenAddress];
         depositInfo.lockDuration += _lockDuration;
         depositInfo.amount = depositInfo.amount.add(_amount);
@@ -117,7 +131,7 @@ contract TokenVault is ReentrancyGuard, Messenger, Ownable {
         userDeposits[msg.sender][_tokenAddress] = depositInfo;
     }
 
-    function withdraw(address _tokenAddress, uint256 _amount) external whenNotPaused onlyOwner nonReentrant {
+    function withdraw(address _tokenAddress, uint256 _amount) public whenNotPaused onlyOwner nonReentrant {
         TokenDeposit storage depositInfo = userDeposits[msg.sender][_tokenAddress];
         require(depositInfo.amount > 0, "No tokens to withdraw");
         require(block.timestamp >= depositInfo.lockDuration, "Tokens can't be withdrawn before the unlock time");
@@ -134,7 +148,7 @@ contract TokenVault is ReentrancyGuard, Messenger, Ownable {
         require(remaining == 0, "Insufficient liquidity");
 
         depositInfo.amount = depositInfo.amount.sub(_amount);
-        _token.transfer(msg.sender, _amount);
+        IERC20(_tokenAddress).transfer(msg.sender, _amount);
         _updateProfile(owner(), _tokenAddress, 0, _amount, 0);
     }
 
@@ -159,7 +173,7 @@ contract TokenVault is ReentrancyGuard, Messenger, Ownable {
         require(remaining == 0, "Insufficient liquidity");
 
         depositInfo.amount = depositInfo.amount.sub(_amount);
-        _token.transfer(_user, _amount);
+        IERC20(_tokenAddress).transfer(_user, _amount);
         _updateProfile(owner(), _tokenAddress, 0, _amount, 0);
     }
 
@@ -178,15 +192,15 @@ contract TokenVault is ReentrancyGuard, Messenger, Ownable {
 
     function _handle(
         address _user,
-        bytes calldata _message
-    ) internal override {
+        bytes memory _message
+    ) internal virtual override {
         // (address _user, address _token, uint256 _addedValue, uint256 _addedWithdrawn,  uint256 _addedDebt) = abi.decode(
         //     _message,
         //     (address, address, uint256, uint256, uint256)
         // );
 
         // _updateUserProfile(_user, _token, _addedValue, _addedWithdrawn, _addedDebt);
-        emit ProfileUpdated(_user, _addedValue, _addedWithdrawn, _addedDebt);
+        // emit ProfileUpdated(_user, _addedValue, _addedWithdrawn, _addedDebt);
     }
 
     // Rebalance Function

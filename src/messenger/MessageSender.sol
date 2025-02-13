@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import "lib/wormhole-solidity-sdk/src/WormholeRelayerSDK.sol";
-import "lib/wormhole-solidity-sdk/src/interfaces/IERC20.sol";
+import "wormhole-solidity-sdk/src/WormholeRelayerSDK.sol";
+import "wormhole-solidity-sdk/src/interfaces/IERC20.sol";
 
 contract CrossChainSender is TokenSender {
     uint256 constant GAS_LIMIT = 250_000;
@@ -51,7 +51,7 @@ contract CrossChainSender is TokenSender {
             targetChain,
             targetReceiver,
             payload,
-            0,
+            cost,
             GAS_LIMIT,
             token,
             amount
@@ -77,17 +77,5 @@ contract CrossChainSender is TokenSender {
             0,
             GAS_LIMIT
         );
-    }
-
-
-    function _updateProfile(
-        address _user, 
-        address _token,
-        uint256 _addedValue, 
-        uint256 _addedWithdrawn, 
-        uint256 _addedDebt
-    ) internal virtual returns (bytes32 messageId) {
-        bytes message = abi.encode(_user, _token, _addedValue, _addedWithdrawn, _addedDebt);
-        sendMessageToAllChains(message);
     }
 }

@@ -3,34 +3,31 @@ pragma solidity ^0.8.10;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {Messenger} from "./messenger/Messenger.sol";
 import {IProvider} from "./provider/ProviderTemplate.sol";
 import {TokenVault} from "./Vault.sol";
 
+import "./utils/SafeMath.sol";
+
 contract DispensingTokenVault is TokenVault{
+    using SafeMath for uint256;
     uint maxPercentage = 100000;
 
-    struct TokenDeposit {
-        uint256 amount;
-        uint256 lockDuration;
-        uint256 dispensingPeriod;
-        bool amountDispenser;
-        uint16 percentageToDispense; //3dp
-        uint256 amountToDispense;
-        uint256 lastDispensedTime;
-    }
-
-    constructor(address _owner)Ownable(_owner) {}
+    constructor(
+        address _owner,
+        address _wormholeRelayer,
+        address _tokenBridge,
+        address _wormhole
+    ) TokenVault(_owner, _wormholeRelayer, _tokenBridge, _wormhole){}
 
     function deposit(address _tokenAddress, uint256 _amount, uint256 _lockDuration, uint256 _amountToDispense, uint256 _dispensingPeriod) external onlyOwner whenNotPaused nonReentrant {
-        super.deposit(_tokenAddress, _amount, _lockDuration);
+        deposit(_tokenAddress, _amount, _lockDuration);
 
-        IERC20(_token).transferFrom(msg.sender, address(this), _amount);
+        IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _amount);
         TokenDeposit storage depositInfo = userDeposits[msg.sender][_tokenAddress];
         // depositInfo.lockDuration += _lockDuration;
         // depositInfo.amount = depositInfo.amount.add(_amount);
@@ -71,18 +68,5 @@ contract DispensingTokenVault is TokenVault{
 
         depositInfo.amount = depositInfo.amount.sub(amount);
         _token.transfer(msg.sender, amount);
-    }
-
-    function _handle(
-        address _user,
-        bytes calldata _message
-    ) internal override {
-        // (address _user, address _token, uint256 _addedValue, uint256 _addedWithdrawn,  uint256 _addedDebt) = abi.decode(
-        //     _message,
-        //     (address, address, uint256, uint256, uint256)
-        // );
-
-        // _updateUserProfile(_user, _token, _addedValue, _addedWithdrawn, _addedDebt);
-        emit ProfileUpdated(_user, _addedValue, _addedWithdrawn, _addedDebt);
     }
 }

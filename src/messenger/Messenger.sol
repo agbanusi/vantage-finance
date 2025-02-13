@@ -2,9 +2,8 @@
 pragma solidity ^0.8.13;
 
 import {CrossChainReceiver} from "./MessageReceiver.sol";
-import {CrossChainSender} from "./MessageSender.sol";
 
-contract Messenger is CrossChainSender, CrossChainReceiver {
+contract Messenger is CrossChainReceiver {
     // Role-based access control
     mapping(address => bool) public isApprovedRelayer; // Mapping of approved relayers
 
@@ -18,7 +17,6 @@ contract Messenger is CrossChainSender, CrossChainReceiver {
         address _tokenBridge,
         address _wormhole
     )
-        CrossChainSender(_wormholeRelayer, _tokenBridge, _wormhole)
         CrossChainReceiver(_wormholeRelayer, _tokenBridge, _wormhole)
     {
         // The deployer is the first approved relayer
@@ -72,9 +70,9 @@ contract Messenger is CrossChainSender, CrossChainReceiver {
     }
 
     // Function to send a message to all whitelisted chains except the sender chain
-    function sendMessageToAllChains(bytes memory message) external payable {
+    function sendMessageToAllChains(bytes memory message) public payable {
         uint16 senderChain = wormhole.chainId();
-        uint value = msg.value
+        uint value = msg.value;
 
         // Iterate through the list of whitelisted chains
         for (uint256 i = 0; i < whitelistedChains.length; i++) {
@@ -96,5 +94,16 @@ contract Messenger is CrossChainSender, CrossChainReceiver {
             // Send the message to the target chain
             sendMessage(chainId, targetAddress, message);
         }
+    }
+
+    function _updateProfile(
+        address _user, 
+        address _token,
+        uint256 _addedValue, 
+        uint256 _addedWithdrawn, 
+        uint256 _addedDebt
+    ) internal virtual returns (bytes32 messageId) {
+        bytes memory message = abi.encode(_user, _token, _addedValue, _addedWithdrawn, _addedDebt);
+        sendMessageToAllChains(message);
     }
 }

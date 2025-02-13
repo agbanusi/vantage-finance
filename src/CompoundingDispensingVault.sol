@@ -3,16 +3,21 @@ pragma solidity ^0.8.10;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {Messenger} from "./messenger/Messenger.sol";
 import {IProvider} from "./provider/ProviderTemplate.sol";
 import {DispensingTokenVault} from "./DispensingVault.sol";
 
 contract DispensingCompoundingTokenVault is  DispensingTokenVault{
-    constructor(address _owner)Ownable(_owner) {}
+    constructor(
+        address _owner,
+        address _wormholeRelayer,
+        address _tokenBridge,
+        address _wormhole
+    ) DispensingTokenVault(_owner, _wormholeRelayer, _tokenBridge, _wormhole){}
 
     function compoundInvestment(address _token) external nonReentrant {      
         uint256 initialBalance = IERC20(_token).balanceOf(address(this));

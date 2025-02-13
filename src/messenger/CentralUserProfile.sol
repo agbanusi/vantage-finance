@@ -2,8 +2,9 @@
 pragma solidity ^0.8.10;
 
 import {Messenger} from "./Messenger.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract UserProfile is Messenger{
+contract UserProfile is Messenger, AccessControl{
     // User data mapping
     mapping(address => UserData) public userData;
     mapping(address => mapping(address => UserDataPerToken)) public userDataPerToken;
@@ -34,7 +35,7 @@ contract UserProfile is Messenger{
         address _tokenBridge,
         address _wormhole
     ) Messenger(_wormholeRelayer, _tokenBridge, _wormhole){
-         _setupRole(COMPOUNDER_ROLE, msg.sender);
+         _grantRole(COMPOUNDER_ROLE, msg.sender);
     }
 
     // Event to log profile updates
@@ -94,9 +95,9 @@ contract UserProfile is Messenger{
     }
 
     function _handle(
-        address _user,
-        bytes calldata _message
-    ) internal override {
+        address recipient,
+        bytes memory _message
+    ) internal virtual override {
         (address _user, address _token, uint256 _addedValue, uint256 _addedWithdrawn,  uint256 _addedDebt) = abi.decode(
             _message,
             (address, address, uint256, uint256, uint256)
