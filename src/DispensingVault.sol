@@ -27,7 +27,6 @@ contract DispensingTokenVault is TokenVault{
     function deposit(address _tokenAddress, uint256 _amount, uint256 _lockDuration, uint256 _amountToDispense, uint256 _dispensingPeriod) external onlyOwner whenNotPaused nonReentrant {
         deposit(_tokenAddress, _amount, _lockDuration);
 
-        IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _amount);
         TokenDeposit storage depositInfo = userDeposits[msg.sender][_tokenAddress];
         // depositInfo.lockDuration += _lockDuration;
         // depositInfo.amount = depositInfo.amount.add(_amount);
